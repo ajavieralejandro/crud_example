@@ -2,7 +2,10 @@
 include 'conexion.php';
 
 $sql = "SELECT * FROM noticias";
+$sql2 = "SELECT * FROM categorias";
 $result = $conn->query($sql);
+$result2 = $conn->query($sql2);
+
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +23,44 @@ $result = $conn->query($sql);
 <body>
     <div>
         <div class="container">
+            <?php
+            if ($result2->num_rows == 0) {
+                echo '<h6>No hay categorias Para mostrar</h6>';
+            } else {
+                echo '
+                <table class="table mt-5">
+                        <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Acciones</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        ';
+                while ($categoria = $result2->fetch_assoc()) {
+                    echo "
+                <tr>
+                        <th >{$categoria['id']}</th>
+                        <td>{$categoria['nombre']}</td>
+                        <td>
+                            <a href=\"eliminar_categoria_controlador.php?id={$categoria['id']}\">
+                            <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
+                            </a>
+
+
+                        </td>
+                </tr>
+                ";
+                }
+
+                echo '</tbody></table>';
+            }
+            ?>
+            <a class="btn btn-primary" href="agregar_categoria_vista.php" role="button">Agregar Categoria</a>
+
+
             <?php
             if ($result->num_rows == 0) {
                 echo '<h6>No hay noticias para mostrar</h6>';
@@ -57,9 +98,9 @@ $result = $conn->query($sql);
             }
             ?>
             <a class="btn btn-primary" href="agregar_noticia_vista.php" role="button">Agregar Noticia</a>
-            <a class="btn btn-primary" href="agregar_categoria_vista.php" role="button">Agregar Categoria</a>
 
         </div>
+
 
     </div>
 
