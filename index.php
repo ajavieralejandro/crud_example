@@ -57,6 +57,7 @@ $result = $conn->query($sql);
             }
             ?>
             <a class="btn btn-primary" href="agregar_noticia_vista.php" role="button">Agregar Noticia</a>
+            <a class="btn btn-primary" href="agregar_categoria_vista.php" role="button">Agregar Categoria</a>
 
         </div>
 
