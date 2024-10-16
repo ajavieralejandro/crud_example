@@ -33,7 +33,8 @@ $result2 = $conn->query($sql2);
                             <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col">Eliminar</th>
+                            <th scope="col">Editar</th>
 
                             </tr>
                         </thead>
@@ -42,14 +43,20 @@ $result2 = $conn->query($sql2);
                 while ($categoria = $result2->fetch_assoc()) {
                     echo "
                 <tr>
-                        <th >{$categoria['id']}</th>
+                        <td >{$categoria['id']}</td>
                         <td>{$categoria['nombre']}</td>
                         <td>
                             <a href=\"eliminar_categoria_controlador.php?id={$categoria['id']}\">
                             <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
                             </a>
+                           
 
 
+                        </td>
+                        <td>
+                              <a   href=\"update_categoria_vista.php?id={$categoria['id']}\">
+                            <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>
+                            </a>
                         </td>
                 </tr>
                 ";
