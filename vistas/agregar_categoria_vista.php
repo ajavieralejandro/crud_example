@@ -1,5 +1,5 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 //$sql = "SELECT * FROM categorias";
 //$result = $conn->query($sql);
@@ -20,7 +20,7 @@ include 'conexion.php';
 <body>
     <div>
         <div class="container">
-            <form method="POST" action="agregar_categoria_controlador.php">
+            <form method="POST" action="../controlador/agregar_categoria_controlador.php">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" required>

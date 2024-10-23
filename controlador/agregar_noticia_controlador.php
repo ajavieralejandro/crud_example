@@ -1,6 +1,6 @@
 <?php
 
-include 'conexion.php';
+include '../conexion.php';
 //session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "INSERT INTO noticias (titulo,texto,imagen_link,categoria_id,autor_id) VALUES ('$title', '$descripcion','$image', '$categoria_id','$autor_id')";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: index.php");
+        header("Location: ../vistas/index.php");
     } else {
         echo "<div class='alert alert-danger mt-3'>Error: " . $conn->error . "</div>";
     }

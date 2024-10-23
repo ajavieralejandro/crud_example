@@ -1,5 +1,5 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 $id = $_GET['id'];
 $sql = "SELECT * FROM categorias WHERE id=$id";
 $result = $conn->query($sql);
@@ -25,7 +25,7 @@ echo $id;
 <body>
     <div>
         <div class="container">
-            <form method="POST" action="actualizar_categoria_controlador.php">
+            <form method="POST" action="../controlador/actualizar_categoria_controlador.php">
                 <input type="hidden" id="id" name="id" value="<?php echo ($id); ?>">
 
                 <div class="mb-3">

@@ -1,10 +1,10 @@
 <?php
-include('conexion.php');
+include('../conexion.php');
 $id = $_GET['id'];
-$sql = "DELETE FROM categorias WHERE id=$id";
+$sql = "DELETE FROM noticias WHERE id=$id";
 
 if ($conn->query($sql) === TRUE) {
-    header("Location: index.php");
+    header("Location: ../vistas/index.php");
 } else {
     echo "<div class='alert alert-danger mt-3'>Error: " . $conn->error . "</div>";
 }

@@ -1,10 +1,11 @@
 <?php
-include 'conexion.php';
+include '../conexion.php';
 
 $sql = "SELECT * FROM noticias";
 $sql2 = "SELECT * FROM categorias";
 $result = $conn->query($sql);
 $result2 = $conn->query($sql2);
+session_start();
 
 ?>
 
@@ -21,6 +22,53 @@ $result2 = $conn->query($sql2);
 </head>
 
 <body>
+    <?php
+    if ($_SESSION)
+        echo '
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="dashboard.php">Dashboard</a>
+                    </li>
+
+
+                </ul>
+                <a href="../controlador/logout.php" class="btn btn-danger">Cerrar Sesión</a>
+
+            </div>
+        </div>
+    </nav>';
+    else
+        echo '
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="dashboard.php">Dashboard</a>
+                    </li>
+
+
+                </ul>
+                <a href="login.php" class="btn btn-outline-primary m-2">Login</a>
+                <a href="register.php" class="btn btn-outline-primary m-2">Register</a>
+
+
+            </div>
+        </div>
+    </nav>
+    '
+    ?>
     <div>
         <div class="container">
             <?php
@@ -46,7 +94,7 @@ $result2 = $conn->query($sql2);
                         <td >{$categoria['id']}</td>
                         <td>{$categoria['nombre']}</td>
                         <td>
-                            <a href=\"eliminar_categoria_controlador.php?id={$categoria['id']}\">
+                            <a href=\"../controlador/eliminar_categoria_controlador.php?id={$categoria['id']}\">
                             <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
                             </a>
                            
@@ -91,7 +139,7 @@ $result2 = $conn->query($sql2);
                         <td>{$noticia['titulo']}</td>
                         <td>{$noticia['categoria_id']}</td>
                         <td>
-                            <a href=\"eliminar_noticia.php?id={$noticia['id']}\">
+                            <a href=\"../controlador/eliminar_noticia_controlador.php?id={$noticia['id']}\">
                             <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
                             </a>
 
