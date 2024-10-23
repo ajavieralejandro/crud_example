@@ -1,12 +1,17 @@
 <?php
 include '../conexion.php';
 session_start();
-$sql = "SELECT * FROM noticias";
+$sql = "SELECT titulo,nombre,texto,imagen_link FROM `noticias` INNER JOIN categorias ON noticias.categoria_id = categorias.id";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $search = $_POST['search'];
+    //convierto lo que leo en minusculas
     $search = strtolower($search);
-    //$sql = "SELECT * FROM noticias WHERE LOWER(titulo) LIKE '%$search%' ";
-    $sql = "SELECT * FROM noticias WHERE LOWER(titulo) LIKE '%$search%'  ";
+    //$sql = "SELECT * FROM noticias WHERE LOWER(titulo) LIKE '%$search%' ";SELECT * FROM noticias LEFT JOIN categorias ON noticias.categoria_id = categorias.id  WHERE LOWER(titulo) LIKE '%$search% 
+    $sql = " SELECT * FROM noticias INNER JOIN categorias ON noticias.categoria_id = categorias.id
+     WHERE LOWER(noticias.titulo) LIKE '%$search%' 
+     OR 
+            LOWER(categorias.nombre) LIKE '%$search%'
+      ";
 }
 $result = $conn->query($sql);
 
@@ -94,7 +99,7 @@ $result = $conn->query($sql);
                         <div class=\"card-body\">
                             <h5 class=\"card-title\">{$noticia['titulo']}</h5>
                             <p class=\"card-text\">{$noticia['texto']}</p>
-                            <a href=\"#\" class=\"btn btn-primary\">Leer más...</a>
+                            <a href=\"#\" class=\"btn btn-primary\">{$noticia['nombre']}</a>
                         </div>
     </div>
     </div>
