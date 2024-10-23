@@ -2,7 +2,14 @@
 include '../conexion.php';
 session_start();
 $sql = "SELECT * FROM noticias";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $search = $_POST['search'];
+    $search = strtolower($search);
+    //$sql = "SELECT * FROM noticias WHERE LOWER(titulo) LIKE '%$search%' ";
+    $sql = "SELECT * FROM noticias WHERE LOWER(titulo) LIKE '%$search%'  ";
+}
 $result = $conn->query($sql);
+
 
 ?>
 
@@ -28,6 +35,7 @@ $result = $conn->query($sql);
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -36,7 +44,11 @@ $result = $conn->query($sql);
 
 
                 </ul>
-                <a href="../controlador/logout.php" class="btn btn-danger">Cerrar Sesión</a>
+                    <form method="POST" action="welcome.php" class="d-flex">
+                    <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <a  href="../controlador/logout.php" class="btn btn-danger m-2">Cerrar Sesión</a>
 
             </div>
         </div>
@@ -67,7 +79,39 @@ $result = $conn->query($sql);
     '
     ?>
 
+    <main>
+        <div class="row p-5">
+
+            <?php
+            if ($result->num_rows == 0) {
+                echo '<h6>No hay noticias para mostrar</h6>';
+            } else {
+                while ($noticia = $result->fetch_assoc()) {
+                    echo "
+        <div class=\"col-sm-12 col-md-4 p-4\">
+    <div class=\"card\" style=\"width: 18rem;\">
+        <img src=\"{$noticia['imagen_link']}\" class=\"card-img-top\" alt=\"...\">
+                        <div class=\"card-body\">
+                            <h5 class=\"card-title\">{$noticia['titulo']}</h5>
+                            <p class=\"card-text\">{$noticia['texto']}</p>
+                            <a href=\"#\" class=\"btn btn-primary\">Leer más...</a>
+                        </div>
+    </div>
+    </div>
+    ";
+                }
+            }
+            ?>
+        </div>
+
+        </div>
+    </main>
+
+
+
 </body>
+
+
 
 </html>
 
