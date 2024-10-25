@@ -1,21 +1,12 @@
 <?php
 include '../conexion.php';
 session_start();
-$sql = "SELECT titulo,nombre,texto,imagen_link,noticias.id FROM `noticias` INNER JOIN categorias ON noticias.categoria_id = categorias.id";
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $search = $_POST['search'];
-    //convierto lo que leo en minusculas
-    $search = strtolower($search);
-    //$sql = "SELECT * FROM noticias WHERE LOWER(titulo) LIKE '%$search%' ";SELECT * FROM noticias LEFT JOIN categorias ON noticias.categoria_id = categorias.id  WHERE LOWER(titulo) LIKE '%$search% 
-    $sql = " SELECT * FROM noticias INNER JOIN categorias ON noticias.categoria_id = categorias.id
-     WHERE LOWER(noticias.titulo) LIKE '%$search%' 
-     OR 
-            LOWER(categorias.nombre) LIKE '%$search%'
-      ";
-}
+$id = $_GET['id'];
+$sql = "SELECT * FROM noticias WHERE id=$id";
 $result = $conn->query($sql);
-
-
+$noticia = $result->fetch_assoc();
+$sql2 = "SELECT * from comentarios INNER JOIN usuarios ON usuario_id = usuarios.id  WHERE noticia_id=$id ";
+$result_comentarios = $conn->query($sql2);
 ?>
 
 <!DOCTYPE html>
@@ -86,30 +77,56 @@ $result = $conn->query($sql);
 
     <main>
         <div class="row p-5">
+            <h1><?php
 
-            <?php
-            if ($result->num_rows == 0) {
-                echo '<h6>No hay noticias para mostrar</h6>';
-            } else {
-                while ($noticia = $result->fetch_assoc()) {
-                    echo "
-        <div class=\"col-sm-12 col-md-4 p-4\">
-    <div class=\"card\" style=\"width: 18rem;\">
-        <img src=\"{$noticia['imagen_link']}\" class=\"card-img-top\" alt=\"...\">
-                        <div class=\"card-body\">
-                            <h5 class=\"card-title\">{$noticia['titulo']}</h5>
-                            <p class=\"card-text\">{$noticia['texto']}</p>
-                            <a href=\"noticia_vista.php?id={$noticia['id']}\" class=\"btn btn-primary\">{$noticia['nombre']}</a>
-                        </div>
-    </div>
-    </div>
-    ";
-                }
+                echo
+                $noticia['titulo']
+                ?></h1>
+            <img class="w-50 p-3" src=<?php echo $noticia['imagen_link'] ?> alt="imagen noticia" />
+            <p>
+                <?php
+                echo $noticia['texto']
+                ?>
+            </p>
+
+        </div>
+
+        <?php
+        if ($result_comentarios->num_rows == 0)
+            echo "No hay comentarios";
+        else {
+            while ($comentario = $result_comentarios->fetch_assoc()) {
+                echo
+                "
+                <div class=\"container\">
+                 <br />
+                 <p> Usuario : " . $comentario['nombre'] . "</p>
+                 <p> Comentario : " . $comentario['contenido'] . "</p>
+                 </div>
+                 ";
             }
-            ?>
-        </div>
+        }
+        ?>
 
         </div>
+        <?php
+
+        if ($_SESSION && $_SESSION['username'])
+            echo '
+          <div class="m-5">
+            <form method="POST" action="../controlador/agregar_comentario_controlador.php">
+               <input type="hidden" id="id" name="noticia_id" value=' . $id . '>
+                <div class="form-group container">
+                    <label for="exampleFormControlTextarea1">Comenta : </label>
+                    <textarea class="mb-2 form-control" name="contenido" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                  <button type="submit" class="btn btn-primary mb-2">Enviar Comentario</button>
+
+                    </div>
+
+            </form>
+        </div>'
+        ?>
+
     </main>
 
 
