@@ -4,6 +4,12 @@ session_start();
 
 if (!$_SESSION['username'])
     header("Location: ../vistas/login.php");
+//Si sos admin te lleva a la vista admin
+
+if ($_SESSION['rol_id'] == 4) {
+    header("Location: ../vistas/index.php");
+    exit;
+}
 
 $id = $_SESSION['id'];
 $sql = "SELECT * FROM noticias WHERE autor_id='$id'";

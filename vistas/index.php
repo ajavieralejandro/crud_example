@@ -190,6 +190,10 @@ if (!$_SESSION['username'])
                             <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
                             </a>
 
+                             <a href=\"../vistas/editar_noticia_vista.php?id={$noticia['id']}\">
+                            <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>
+                            </a>
+
 
                         </td>
                 </tr>
