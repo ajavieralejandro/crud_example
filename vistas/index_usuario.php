@@ -1,15 +1,14 @@
 <?php
 include '../conexion.php';
-
-$sql = "SELECT * FROM noticias";
-$sql2 = "SELECT * FROM categorias";
-$sql_usuarios = "SELECT * FROM usuarios";
-$result = $conn->query($sql);
-$result2 = $conn->query($sql2);
-$result_usuarios = $conn->query($sql_usuarios);
 session_start();
+
 if (!$_SESSION['username'])
     header("Location: ../vistas/login.php");
+
+$id = $_SESSION['id'];
+$sql = "SELECT * FROM noticias WHERE autor_id='$id'";
+
+$result = $conn->query($sql);
 
 
 ?>
@@ -76,91 +75,8 @@ if (!$_SESSION['username'])
     ?>
     <div>
         <div class="container">
-            <?php
-            if ($result_usuarios->num_rows == 0) {
-                echo '<h6>No hay usuarios Para mostrar</h6>';
-            } else {
-                echo '
-                <table class="table mt-5">
-                        <thead>
-                            <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Eliminar</th>
-                            <th scope="col">Editar</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                        ';
-                while ($usuario = $result_usuarios->fetch_assoc()) {
-                    echo "
-                <tr>
-                        <td >{$usuario['id']}</td>
-                        <td>{$usuario['nombre']}</td>
-                        <td>
-                            <a href=\"../controlador/eliminar_categoria_controlador.php?id={$usuario['id']}\">
-                            <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
-                            </a>
-                           
 
 
-                        </td>
-                        <td>
-                              <a   href=\"editar_usuario_vista.php?id={$usuario['id']}\">
-                            <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>
-                            </a>
-                        </td>
-                </tr>
-                ";
-                }
-
-                echo '</tbody></table>';
-            }
-            ?>
-            <?php
-            if ($result2->num_rows == 0) {
-                echo '<h6>No hay categorias Para mostrar</h6>';
-            } else {
-                echo '
-                <table class="table mt-5">
-                        <thead>
-                            <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Eliminar</th>
-                            <th scope="col">Editar</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                        ';
-                while ($categoria = $result2->fetch_assoc()) {
-                    echo "
-                <tr>
-                        <td >{$categoria['id']}</td>
-                        <td>{$categoria['nombre']}</td>
-                        <td>
-                            <a href=\"../controlador/eliminar_categoria_controlador.php?id={$categoria['id']}\">
-                            <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
-                            </a>
-                           
-
-
-                        </td>
-                        <td>
-                              <a   href=\"update_categoria_vista.php?id={$categoria['id']}\">
-                            <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>
-                            </a>
-                        </td>
-                </tr>
-                ";
-                }
-
-                echo '</tbody></table>';
-            }
-            ?>
-            <a class="btn btn-primary" href="agregar_categoria_vista.php" role="button">Agregar Categoria</a>
 
 
             <?php

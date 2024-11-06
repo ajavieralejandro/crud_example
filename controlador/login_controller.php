@@ -6,12 +6,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     $sql = "SELECT * FROM usuarios WHERE nombre = '$username'";
+
     $result = $conn->query($sql);
     //Verifico que me este trayendo un usuario
     if ($result->num_rows > 0) {
 
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['contraseña'])) {
+
             //Estoy asignando un usuario a la sesion
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $user['id'];
@@ -23,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             //Si soy otro usuario lo llevo a un dashboard normal
-            header("Location : ../vistas/welcome.php");
+            header("Location: ../vistas/index_usuario.php");
             exit;
         } else {
             echo "<div class='alert alert-danger mt-3'>Contraseña incorrecta</div>";

@@ -1,8 +1,13 @@
 <?php
 include '../conexion.php';
-
+session_start();
+if (!$_SESSION['username'])
+    header("Location: ../vistas/login.php");
 $sql = "SELECT * FROM categorias";
 $result = $conn->query($sql);
+
+
+
 ?>
 
 <!DOCTYPE html>

@@ -1,8 +1,11 @@
 <?php
 include '../conexion.php';
 
-//$sql = "SELECT * FROM categorias";
-//$result = $conn->query($sql);
+//chequear que el usuario tiene una sesion 
+session_start();
+if (!$_SESSION['username'])
+    header("Location: ../vistas/login.php");
+
 ?>
 
 <!DOCTYPE html>

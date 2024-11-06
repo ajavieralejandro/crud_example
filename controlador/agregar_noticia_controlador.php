@@ -1,7 +1,8 @@
 <?php
 
 include '../conexion.php';
-//session_start();
+session_start();
+$autor_id = $_SESSION['id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -9,12 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $image = $_POST['image'];
     $descripcion = $_POST['descripcion'];
     $categoria_id = $_POST['categoria'];
-    $autor_id =  4;
 
     $sql = "INSERT INTO noticias (titulo,texto,imagen_link,categoria_id,autor_id) VALUES ('$title', '$descripcion','$image', '$categoria_id','$autor_id')";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: ../vistas/index.php");
+        if ($_SESSION['rol_id'] == 4) {
+            header("Location: ../vistas/index.php");
+            exit;
+        }
+
+        //Si soy otro usuario lo llevo a un dashboard normal
+        header("Location: ../vistas/index_usuario.php");
+        exit;
     } else {
         echo "<div class='alert alert-danger mt-3'>Error: " . $conn->error . "</div>";
     }

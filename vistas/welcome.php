@@ -26,7 +26,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="./welcome.css" />
     <title>Noticias</title>
 </head>
 
@@ -85,7 +85,70 @@ $result = $conn->query($sql);
     ?>
 
     <main>
+
         <div class="row p-5">
+            <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicadores de cada slide -->
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#newsCarousel" data-bs-slide-to="0" class="active"></li>
+                    <li data-bs-target="#newsCarousel" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#newsCarousel" data-bs-slide-to="2"></li>
+                </ol>
+
+                <?php
+                $cont = 0;
+                $noticia = $result->fetch_assoc();
+                while ($noticia != null && $cont < 3) {
+                    if ($cont == 0) {
+                        echo '
+                            
+                        <div class="carousel-item active">
+                            <img src="' . $noticia['imagen_link'] . '" class="d-block w-100" alt="Imagen de noticia 1">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>' . $noticia['titulo'] . '</h5>
+                                <p>' . $noticia['texto'] . '</p>
+                            </div>
+                        </div>
+        
+        
+        
+                            ';
+                    } else {
+                        echo '
+                            
+                <div class="carousel-item ">
+                    <img src="' . $noticia['imagen_link'] . '" class="d-block w-100" alt="Imagen de noticia 1">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>' . $noticia['titulo'] . '</h5>
+                        <p>' . $noticia['texto'] . '</p>
+                    </div>
+                </div>
+
+
+
+                    ';
+                    }
+                    $cont = $cont + 1;
+                    $noticia = $result->fetch_assoc();
+                }
+
+                ?>
+
+
+
+                <!-- Controles del carrusel -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+
+
+
 
             <?php
             if ($result->num_rows == 0) {
@@ -112,6 +175,9 @@ $result = $conn->query($sql);
         </div>
     </main>
 
+    <!-- JavaScript de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
 </body>
