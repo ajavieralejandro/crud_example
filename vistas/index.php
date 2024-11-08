@@ -11,6 +11,9 @@ session_start();
 if (!$_SESSION['username'])
     header("Location: ../vistas/login.php");
 
+if (isset($_SESSION['mensaje']))
+    $mensajeExito = $_SESSION['mensaje'];
+
 
 ?>
 
@@ -39,7 +42,7 @@ if (!$_SESSION['username'])
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="dashboard.php">Dashboard</a>
+                        <a class="nav-link active" aria-current="page" href="perfil.php">Perfil</a>
                     </li>
 
 
@@ -75,6 +78,15 @@ if (!$_SESSION['username'])
     '
     ?>
     <div>
+        <?php
+        if (isset($mensajeExito))
+            echo '
+                    <div class="alert alert-primary" role="alert">
+                         Operacion realizada con exito
+                    </div>
+            
+                    '
+        ?>
         <div class="container">
             <?php
             if ($result_usuarios->num_rows == 0) {
