@@ -15,7 +15,7 @@ $result_usuario = $conn->query($sql);
 $value = $result_usuario->fetch_assoc();
 $name = $value['nombre'];
 $email = $value['email'];
-
+$user = $value;
 
 if (!$_SESSION['username'])
     header("Location: ../vistas/login.php");
@@ -88,9 +88,20 @@ if (isset($_SESSION['mensaje']))
     ?>
     <div class="container rounded bg-white mt-5 mb-5">
         <form method="POST" action="../controlador/actualizar_perfil_controlador.php" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" value="<?php echo ($id); ?>">
+
             <div class="row">
                 <div class="col-md-3 border-right">
-                    <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <?php
+                        if ($user['imagen'] != null)
+                            echo '<img class="rounded-circle mt-5" width="150px" src="' . $user['imagen'] . '">';
+                        else
+                            echo '                        <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+'
+                        ?>
+
+
                         <input type="file" name="fileToUpload" id="fileToUpload">
 
                     </div>

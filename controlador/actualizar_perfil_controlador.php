@@ -1,8 +1,19 @@
 <?php
+if ($_FILES['fileToUpload']['name'] == "") {
+    echo "No estas subiendo ninguna imagen";
+    exit;
+    // No file was selected for upload, your (re)action goes here
+}
 $target_dir = "../images/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+$id = $_POST['id'];
+include('../conexion.php');
+
+$sql = "SELECT * from usuarios WHERE id=$id";
+$user = $conn->query($sql)->fetch_assoc();
+
 // Check if image file is a actual image or fake image
 
 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
@@ -45,4 +56,13 @@ if ($uploadOk == 0) {
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
+}
+
+//Una vez que guarde la imagen necesito otra consulta para actualizar los campos de usuario
+$sql2 = "UPDATE  usuarios SET imagen = '$target_file' WHERE id=$id";
+
+if ($conn->query($sql2) === TRUE) {
+    header("Location: ../vistas/index.php");
+} else {
+    echo "<div class='alert alert-danger mt-3'>Error: " . $conn->error . "</div>";
 }

@@ -3,9 +3,13 @@ include '../conexion.php';
 session_start();
 $id = $_GET['id'];
 $sql = "SELECT * FROM noticias WHERE id=$id";
+//obtengo el id del usuario
+$user_id = $_SESSION['id'];
+$rol_id = $_SESSION['rol_id'];
 $result = $conn->query($sql);
 $noticia = $result->fetch_assoc();
-$sql2 = "SELECT * from comentarios INNER JOIN usuarios ON usuario_id = usuarios.id  WHERE noticia_id=$id ";
+$sql2 = "SELECT comentarios.id AS comentario_id, usuarios.nombre AS nombre, comentarios.contenido AS contenido FROM comentarios INNER JOIN usuarios ON usuario_id = usuarios.id WHERE noticia_id=9;
+ ";
 $result_comentarios = $conn->query($sql2);
 ?>
 
@@ -96,14 +100,21 @@ $result_comentarios = $conn->query($sql2);
             echo "No hay comentarios";
         else {
             while ($comentario = $result_comentarios->fetch_assoc()) {
+
                 echo
                 "
                 <div class=\"container\">
                  <br />
                  <p> Usuario : " . $comentario['nombre'] . "</p>
-                 <p> Comentario : " . $comentario['contenido'] . "</p>
-                 </div>
-                 ";
+                 <p> Comentario : " . $comentario['contenido'] . "</p>";
+
+                if ($user_id == $noticia['autor_id'] || $rol_id == 1)
+                    echo '
+                          <a class="button" href="../controlador/eliminar_comentario.php?id=' . $comentario['comentario_id'] .  '&noticia_id=' . $id . '">Eliminar comentario </a>
+                          <button>Editar comentario</button>
+                    ';
+
+                echo "</div>";
             }
         }
         ?>
