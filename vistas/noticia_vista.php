@@ -1,6 +1,8 @@
 <?php
 include '../conexion.php';
 session_start();
+if (!isset($_SESSION['comentario']))
+    $_SESSION['comentario'] = null;
 $id = $_GET['id'];
 $sql = "SELECT * FROM noticias WHERE id=$id";
 //obtengo el id del usuario
@@ -111,7 +113,7 @@ $result_comentarios = $conn->query($sql2);
                 if ($user_id == $noticia['autor_id'] || $rol_id == 1)
                     echo '
                           <a class="button" href="../controlador/eliminar_comentario.php?id=' . $comentario['comentario_id'] .  '&noticia_id=' . $id . '">Eliminar comentario </a>
-                          <button>Editar comentario</button>
+                          <a class="button" href="../controlador/editar_comentario_controlador.php?id=' . $comentario['comentario_id'] .  '&noticia_id=' . $id . '&comentario=' . $comentario['contenido'] . '">Editar comentario </a>
                     ';
 
                 echo "</div>";
@@ -121,6 +123,21 @@ $result_comentarios = $conn->query($sql2);
 
         </div>
         <?php
+
+        if ($_SESSION && $_SESSION['username'] && $_SESSION['comentario'] != null)
+            echo '
+<div class="m-5">
+<form method="POST" action="../controlador/agregar_comentario_controlador.php">
+   <input type="hidden" id="id" name="noticia_id" value=' . $id . '>
+    <div class="form-group container">
+        <label for="exampleFormControlTextarea1">Comenta : </label>
+        <textarea class="mb-2 form-control" name="contenido" id="exampleFormControlTextarea1" rows="3">' . $_SESSION['comentario'] . '</textarea>
+                      <button type="submit" class="btn btn-primary mb-2">Editar Comentario</button>
+
+        </div>
+
+</form>
+</div>';
 
         if ($_SESSION && $_SESSION['username'])
             echo '
