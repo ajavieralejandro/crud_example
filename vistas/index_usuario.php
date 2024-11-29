@@ -114,6 +114,13 @@ $result = $conn->query($sql);
 
 
                         </td>
+                           <td>
+                            <a href=\"../controlador/eliminar_noticia_controlador.php?id={$noticia['id']}\">
+                            <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>
+                            </a>
+
+
+                        </td>
                 </tr>
                 ";
                 }

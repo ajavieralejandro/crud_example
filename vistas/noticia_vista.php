@@ -1,16 +1,28 @@
 <?php
 include '../conexion.php';
 session_start();
+$comentando = false;
+if (isset($_GET['comentario_id'])) {
+    $_SESSION['comentario'] = "Hola Mundo";
+}
 if (!isset($_SESSION['comentario']))
     $_SESSION['comentario'] = null;
 $id = $_GET['id'];
+
 $sql = "SELECT * FROM noticias WHERE id=$id";
 //obtengo el id del usuario
-$user_id = $_SESSION['id'];
-$rol_id = $_SESSION['rol_id'];
+if (!isset($_SESSION['id'])) {
+    $user_id = null;
+    $rol_id = null;
+} else {
+    $user_id = $_SESSION['id'];
+    $rol_id = $_SESSION['rol_id'];
+}
+
 $result = $conn->query($sql);
 $noticia = $result->fetch_assoc();
-$sql2 = "SELECT comentarios.id AS comentario_id, usuarios.nombre AS nombre, comentarios.contenido AS contenido FROM comentarios INNER JOIN usuarios ON usuario_id = usuarios.id WHERE noticia_id=9;
+
+$sql2 = "SELECT comentarios.usuario_id as usuario_id, comentarios.id AS comentario_id, usuarios.nombre AS nombre, comentarios.contenido AS contenido FROM comentarios INNER JOIN usuarios ON usuario_id = usuarios.id WHERE noticia_id=9;
  ";
 $result_comentarios = $conn->query($sql2);
 ?>
@@ -110,10 +122,10 @@ $result_comentarios = $conn->query($sql2);
                  <p> Usuario : " . $comentario['nombre'] . "</p>
                  <p> Comentario : " . $comentario['contenido'] . "</p>";
 
-                if ($user_id == $noticia['autor_id'] || $rol_id == 1)
+                if ($user_id == $comentario['usuario_id'] || $rol_id == 1)
                     echo '
                           <a class="button" href="../controlador/eliminar_comentario.php?id=' . $comentario['comentario_id'] .  '&noticia_id=' . $id . '">Eliminar comentario </a>
-                          <a class="button" href="../controlador/editar_comentario_controlador.php?id=' . $comentario['comentario_id'] .  '&noticia_id=' . $id . '&comentario=' . $comentario['contenido'] . '">Editar comentario </a>
+                          <a class="button" href="./noticia_vista.php?id=' . $id . '&comentario_id=' . $comentario['comentario_id'] . '">Editar comentario </a>
                     ';
 
                 echo "</div>";
@@ -124,7 +136,7 @@ $result_comentarios = $conn->query($sql2);
         </div>
         <?php
 
-        if ($_SESSION && $_SESSION['username'] && $_SESSION['comentario'] != null)
+        if (isset($_SESSION['username']) && $_SESSION['comentario'] == null)
             echo '
 <div class="m-5">
 <form method="POST" action="../controlador/agregar_comentario_controlador.php">
@@ -132,27 +144,29 @@ $result_comentarios = $conn->query($sql2);
     <div class="form-group container">
         <label for="exampleFormControlTextarea1">Comenta : </label>
         <textarea class="mb-2 form-control" name="contenido" id="exampleFormControlTextarea1" rows="3">' . $_SESSION['comentario'] . '</textarea>
-                      <button type="submit" class="btn btn-primary mb-2">Editar Comentario</button>
+                      <button type="submit" class="btn btn-primary mb-2">Agregar Comentario</button>
 
         </div>
 
 </form>
 </div>';
 
-        if ($_SESSION && $_SESSION['username'])
+        else
             echo '
-          <div class="m-5">
-            <form method="POST" action="../controlador/agregar_comentario_controlador.php">
-               <input type="hidden" id="id" name="noticia_id" value=' . $id . '>
-                <div class="form-group container">
-                    <label for="exampleFormControlTextarea1">Comenta : </label>
-                    <textarea class="mb-2 form-control" name="contenido" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                  <button type="submit" class="btn btn-primary mb-2">Enviar Comentario</button>
+        <div class="m-5">
+        <form method="POST" action="../controlador/editar_comentario_controlador.php">
+           <input type="hidden" id="id" name="id" value=' . $_GET['comentario_id'] . '>
+            <div class="form-group container">
+                <label for="exampleFormControlTextarea1">Comenta : </label>
+                <textarea class="mb-2 form-control" name="contenido" id="exampleFormControlTextarea1" rows="3">' . $_SESSION['comentario'] . '</textarea>
+                              <button type="submit" class="btn btn-primary mb-2">Agregar Comentario</button>
+        
+                </div>
+        
+        </form>
+        </div>';
 
-                    </div>
 
-            </form>
-        </div>'
         ?>
 
     </main>
